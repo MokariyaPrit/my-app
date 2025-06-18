@@ -1,102 +1,130 @@
+// src/pages/Signup.tsx
+import React, { useState } from 'react';
 import {
-  Box,
   Button,
   Container,
   MenuItem,
+  Select,
   TextField,
   Typography,
+  InputLabel,
+  FormControl,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { signupUser } from '../services/userService';
+import { signupUser } from '../services/authService';
+
+const roles = ['user', 'manager', 'admin', 'superadmin'];
+const regions = ['Gujarat', 'Maharashtra', 'Punjab', 'Delhi', 'Karnataka']; // Add as needed
 
 export default function Signup() {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    role: 'user' as 'user' | 'manager' | 'admin' | 'superadmin',
+    role: 'user',
+    region: 'Gujarat',
   });
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name as string]: value,
     }));
   };
 
-  const handleSignup = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      await signupUser(form);
+      await signupUser(formData); // should call backend with DTO matching fields
       navigate('/login');
-    } catch (error: any) {
-      console.error('Signup error:', error.response?.data || error.message);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Signup failed');
     }
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box mt={10}>
-        <Typography variant="h5" mb={3}>
-          Sign Up
-        </Typography>
-
+    <Container maxWidth="sm" sx={{ mt: 8 }}>
+      <Typography variant="h4" mb={3}>
+        Sign Up
+      </Typography>
+      <form onSubmit={handleSubmit}>
         <TextField
-          label="Name"
-          name="name"
           fullWidth
-          margin="normal"
-          value={form.name}
-          onChange={handleChange}
-        />
-
-        <TextField
           label="Email"
           name="email"
           type="email"
-          fullWidth
           margin="normal"
-          value={form.email}
+          value={formData.email}
           onChange={handleChange}
+          required
+        />
+        <TextField
+          fullWidth
+          label="Name"
+          name="name"
+          type="text"
+          margin="normal"
+          value={formData.name}
+          onChange={handleChange}
+          required
         />
 
         <TextField
+          fullWidth
           label="Password"
           name="password"
           type="password"
-          fullWidth
           margin="normal"
-          value={form.password}
+          value={formData.password}
           onChange={handleChange}
-        />
+          required
+        /> 
 
-        <TextField
-          label="Role"
-          name="role"
-          select
-          fullWidth
-          margin="normal"
-          value={form.role}
-          onChange={handleChange}
-        >
-          <MenuItem value="user">User</MenuItem>
-          <MenuItem value="manager">Manager</MenuItem>
-          <MenuItem value="admin">Admin</MenuItem>
-          <MenuItem value="superadmin">Super Admin</MenuItem>
-        </TextField>
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Role</InputLabel>
+          <Select
+            name="role"
+            value={formData.role}
+            onChange={(e) => handleChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>)}
+            required
+          >
+            {roles.map((role) => (
+              <MenuItem key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 2 }}
-          onClick={handleSignup}
-        >
+        <FormControl fullWidth margin="normal">
+          <InputLabel>Region</InputLabel>
+          <Select
+            name="region"
+            value={formData.region}
+            onChange={(e) => handleChange(e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>)}
+            required
+          >
+            {regions.map((region) => (
+              <MenuItem key={region} value={region}>
+                {region}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {error && (
+          <Typography color="error" variant="body2" mt={1}>
+            {error}
+          </Typography>
+        )}
+
+        <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
           Sign Up
         </Button>
-      </Box>
+      </form>
     </Container>
   );
 }
-    

@@ -15,8 +15,12 @@ const menuItems = [
   { text: 'Profile', path: '/profile' },
   { text: 'Settings', path: '/settings' },
   { text: 'superadmin', path: '/superadmin' },
-];
-
+  { text: 'admin', path: '/admin' },
+  { text: 'manager', path: '/manager' }, 
+  { text: 'Add Car', path: '/add-car' },
+  { text: 'Car List', path: '/car-list' },
+]; 
+ 
 export default function Sidebar() {
   const location = useLocation();
 

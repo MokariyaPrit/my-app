@@ -1,12 +1,13 @@
-// src/api/axios.ts
+
+// ✅ src/api/axios.ts
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000', // Your backend base URL
+  baseURL: 'http://localhost:3000',
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // if you're using cookies
+  withCredentials: true,
 });
 
 export default api;
