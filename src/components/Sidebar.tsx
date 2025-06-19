@@ -19,8 +19,12 @@ const menuItems = [
   { text: 'manager', path: '/manager' }, 
   { text: 'Add Car', path: '/add-car' },
   { text: 'Car List', path: '/car-list' },
+  { text: 'Public List', path: '/cars/public' },
+  { text: 'Manager cars', path: '/ManagerCarsPage' },
+         
+  
 ]; 
- 
+  
 export default function Sidebar() {
   const location = useLocation();
 

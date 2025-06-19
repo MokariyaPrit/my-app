@@ -15,6 +15,11 @@ import ManagerPanel from "./pages/ManagerPanel";
 import AddCarPage from "./pages/AddCarPage";
 import CarListPage from "./pages/CarListPage";
 import CarDetails from "./pages/CarDetails";
+import CarEditPage from "./pages/CarEditPage";
+import AllCarsPage from "./pages/AllCarsPage";
+import PublicCarsPage from "./pages/PublicCarsPage";
+import ManagerCarsPage from "./pages/AllCarsPage";
+import CarDetailsPage from "./pages/CarDetailsPage";
 
 export default function App() {
   const { isAuthenticated, loading } = useAuth();
@@ -83,7 +88,7 @@ export default function App() {
                       <AddCarPage />
                     </RequireRole>
                   }
-                />  
+                />
                 <Route
                   path="/add-car"
                   element={
@@ -91,7 +96,7 @@ export default function App() {
                       <AddCarPage />
                     </RequireRole>
                   }
-                />  
+                />
                 <Route
                   path="/add-car"
                   element={
@@ -99,7 +104,7 @@ export default function App() {
                       <CarListPage />
                     </RequireRole>
                   }
-                />  
+                />
 
                 <Route
                   path="/add-car"
@@ -107,22 +112,41 @@ export default function App() {
                     <RequireRole role="admin">
                       <CarListPage />
                     </RequireRole>
-                  }
-                />  
+                  }  
+                />
                 <Route
                   path="/add-car"
                   element={
                     <RequireRole role="superadmin">
                       <CarListPage />
                     </RequireRole>
-                  } 
-                />  
+                  }
+                />
+                <Route
+                  path="/secure/cars/:id"
+                  element={
+                    <RequireRole role="manager">
+                      <CarDetails />
+                    </RequireRole>
+                  }
+                />
+                <Route
+                  path="/secure/cars/:id"
+                  element={
+                    <RequireRole role="admin">
+                      <CarDetails />
+                    </RequireRole>
+                  }
+                />
                 <Route path="/unauthorized" element={<Unauthorized />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/car-list" element={<CarListPage />} />
-                <Route path="/cars/:id" element={<CarDetails />} />
+                <Route path="/cars/:id" element={<CarDetailsPage />} />
+                <Route path="/cars/edit/:id" element={<CarEditPage />} />
+                <Route path="/ManagerCarsPage" element={<ManagerCarsPage />} />
+                <Route path="/cars/public" element={<PublicCarsPage />} />
               </Routes>
             </Layout>
           </PrivateRoute>

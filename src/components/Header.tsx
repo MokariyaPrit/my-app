@@ -1,6 +1,7 @@
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeSwitcher from './ThemeSwitcher';
 
 export default function Header() {
   const { isAuthenticated, logout } = useAuth();
@@ -17,9 +18,9 @@ export default function Header() {
         <Typography variant="h6" noWrap>
           My React App
         </Typography>
-
         {isAuthenticated && (
           <Box>
+            <ThemeSwitcher />
             <Button color="inherit" onClick={handleLogout}>
               Logout
             </Button>

@@ -1,30 +1,43 @@
 import React, { useState } from 'react';
 import {
-  Box, Button, TextField, Typography, MenuItem,
+  Box,
+  Button,
+  TextField,
+  Typography,
+  MenuItem,
 } from '@mui/material';
+import { Grid } from '@mui/material';
 import axios from 'axios';
 
-const AddCar = () => {
+const AddCarPage = () => {
   const [formData, setFormData] = useState({
-    make: '',
+    Brand: '',
     model: '',
     year: '',
     color: '',
-  }); 
+    Number: '',
+    type: '',
+    transmission: '',
+    fuelType: '',
+    mileage: '',
+    price: '',
+  });
+
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-  const token = localStorage.getItem('access_token'); 
- 
+  const token = localStorage.getItem('access_token');
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setImage(file);
-      setPreviewUrl(URL.createObjectURL(file)); // preview
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
@@ -45,6 +58,7 @@ const AddCar = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+
       alert('Car added successfully!');
       console.log(response.data);
     } catch (error) {
@@ -54,69 +68,162 @@ const AddCar = () => {
   };
 
   return (
-    <Box maxWidth={500} mx="auto" mt={5} component="form" onSubmit={handleSubmit}>
-      <Typography variant="h5" mb={2}>Add Car</Typography>
+    <Box maxWidth={900} mx="auto" mt={5} component="form" onSubmit={handleSubmit}>
+      <Typography variant="h4" mb={3}>
+        Add Car
+      </Typography>
 
-      <TextField
-        label="Make"
-        name="make"
-        value={formData.make}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-        required
-      />
-      <TextField
-        label="Model"
-        name="model"
-        value={formData.model}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-        required
-      />
-      <TextField
-        label="Year"
-        name="year"
-        type="number"
-        value={formData.year}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-        required
-      />
-      <TextField
-        select
-        label="Color"
-        name="color"
-        value={formData.color}
-        onChange={handleInputChange}
-        fullWidth
-        margin="normal"
-        required
-      >
-        {['Red', 'Blue', 'Black', 'White', 'Silver'].map((color) => (
-          <MenuItem key={color} value={color}>{color}</MenuItem>
-        ))}
-      </TextField>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Brand"
+            name="Brand"
+            value={formData.Brand}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Model"
+            name="model"
+            value={formData.model}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Year"
+            name="year"
+            type="number"
+            value={formData.year}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            select
+            label="Color"
+            name="color"
+            value={formData.color}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          >
+            {['Red', 'Blue', 'Black', 'White', 'Silver'].map((color) => (
+              <MenuItem key={color} value={color}>
+                {color}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Number"
+            name="Number"
+            value={formData.Number}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Type"
+            name="type"
+            value={formData.type}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            select
+            label="Transmission"
+            name="transmission"
+            value={formData.transmission}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          >
+            {['Automatic', 'Manual'].map((t) => (
+              <MenuItem key={t} value={t}>
+                {t}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            select
+            label="Fuel Type"
+            name="fuelType"
+            value={formData.fuelType}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          >
+            {['Petrol', 'Diesel', 'Hybrid'].map((f) => (
+              <MenuItem key={f} value={f}>
+                {f}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Mileage"
+            name="mileage"
+            type="number"
+            value={formData.mileage}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextField
+            label="Price"
+            name="price"
+            type="number"
+            value={formData.price}
+            onChange={handleInputChange}
+            fullWidth
+            required
+          />
+        </Grid>
 
-      <Button variant="contained" component="label" sx={{ mt: 2 }}>
-        Upload Image
-        <input type="file" hidden accept="image/*" onChange={handleImageChange} />
-      </Button>
+        <Grid item xs={12}>
+          <Button variant="contained" component="label">
+            Upload Image
+            <input type="file" hidden accept="image/*" onChange={handleImageChange} />
+          </Button>
+        </Grid>
 
-      {previewUrl && (
-        <Box mt={2}>
-          <Typography variant="subtitle1">Image Preview:</Typography>
-          <img src={previewUrl} alt="Car Preview" style={{ width: '100%', borderRadius: 8 }} />
-        </Box>
-      )}
-
-      <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
-        Submit
-      </Button>
+        {previewUrl && (
+          <Grid item xs={12}>
+            <Typography variant="subtitle1">Image Preview:</Typography>
+            <img
+              src={previewUrl}
+              alt="Car Preview"
+              style={{ width: '100%', maxHeight: 300, borderRadius: 8, objectFit: 'contain' }}
+            />
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
 
-export default AddCar;
+export default AddCarPage;

@@ -1,47 +1,55 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, Card, CardContent, CardMedia, Typography, Grid } from '@mui/material';
+import {
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActionArea,
+  Button,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 
-interface Car {
-  id: string;
-  make: string;
-  model: string;
-  year: number;
-  color: string;
-  imageUrl: string;
-}
-
-interface Props {
-  cars: Car[];
-}
-
-const CarGrid: React.FC<Props> = ({ cars }) => {
+export default function CarGrid({ cars }: { cars: any[] }) {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ padding: 4 }}>
-      <Grid container spacing={3}>
-        {cars.map((car) => (
-          <Grid item xs={12} sm={6} md={4} key={car.id}>
-            <Card sx={{ cursor: 'pointer', boxShadow: 4 }} onClick={() => navigate(`/cars/${car.id}`)}>
+    <Grid container spacing={3} padding={2}>
+      {cars.map((car) => (
+        <Grid item xs={12} sm={6} md={4} key={car.id}>
+          <Card sx={{ height: 360, display: 'flex', flexDirection: 'column' }}>
+            <CardActionArea onClick={() => navigate(`/cars/${car.id}`)} sx={{ flexGrow: 1 }}>
               <CardMedia
                 component="img"
                 height="180"
-                image={car.imageUrl}
-                alt={`${car.make} ${car.model}`}
+                image={car.imageUrl || "/placeholder.jpg"}
+                alt={car.Brand}
+                sx={{ objectFit: "cover" }}
               />
               <CardContent>
-                <Typography variant="h6">{car.make} {car.model}</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {car.year} • {car.color}
+                <Typography gutterBottom variant="h6" noWrap>
+                  {car.Brand} - {car.model}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" noWrap>
+                  {car.year} | {car.type} | {car.fuelType}
+                </Typography>
+                <Typography variant="subtitle1" color="text.primary">
+                  ₹{Number(car.price).toLocaleString()}
                 </Typography>
               </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+            </CardActionArea>
+            <Button
+              component={Link}
+              to={`/cars/edit/${car.id}`}
+              variant="outlined"
+              fullWidth
+              sx={{ borderTop: '1px solid #eee', borderRadius: 0 }}
+            >
+              Edit
+            </Button>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
-};
-
-export default CarGrid;
+}
+ 
